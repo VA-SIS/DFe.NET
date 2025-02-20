@@ -123,6 +123,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NFe.Danfe.PdfClown", "NFe.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NFe.Danfe.QuestPdf", "NFe.Danfe.QuestPdf\NFe.Danfe.QuestPdf.csproj", "{C3EB9A85-92D6-4201-96AB-959CBAE4BF1B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vasis.Facil.app", "Vasis.Facil.app\Vasis.Facil.app.csproj", "{2659600E-A005-4553-9A6C-F3D3D08C0F59}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -483,6 +485,18 @@ Global
 		{C3EB9A85-92D6-4201-96AB-959CBAE4BF1B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C3EB9A85-92D6-4201-96AB-959CBAE4BF1B}.Release|x86.ActiveCfg = Release|Any CPU
 		{C3EB9A85-92D6-4201-96AB-959CBAE4BF1B}.Release|x86.Build.0 = Release|Any CPU
+		{2659600E-A005-4553-9A6C-F3D3D08C0F59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2659600E-A005-4553-9A6C-F3D3D08C0F59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2659600E-A005-4553-9A6C-F3D3D08C0F59}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{2659600E-A005-4553-9A6C-F3D3D08C0F59}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2659600E-A005-4553-9A6C-F3D3D08C0F59}.Debug|x86.Build.0 = Debug|Any CPU
+		{2659600E-A005-4553-9A6C-F3D3D08C0F59}.Debug|x86.Deploy.0 = Debug|Any CPU
+		{2659600E-A005-4553-9A6C-F3D3D08C0F59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2659600E-A005-4553-9A6C-F3D3D08C0F59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2659600E-A005-4553-9A6C-F3D3D08C0F59}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{2659600E-A005-4553-9A6C-F3D3D08C0F59}.Release|x86.ActiveCfg = Release|Any CPU
+		{2659600E-A005-4553-9A6C-F3D3D08C0F59}.Release|x86.Build.0 = Release|Any CPU
+		{2659600E-A005-4553-9A6C-F3D3D08C0F59}.Release|x86.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

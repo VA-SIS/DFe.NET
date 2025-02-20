@@ -562,7 +562,7 @@ namespace MDFe.AppTeste
             mdfe.InfMDFe.Ide.TpAmb = config.ConfigWebService.Ambiente;
             mdfe.InfMDFe.Ide.TpEmit = MDFeTipoEmitente.PrestadorServicoDeTransporte;
             mdfe.InfMDFe.Ide.Mod = ModeloDocumento.MDFe;
-            mdfe.InfMDFe.Ide.Serie = 750;
+            mdfe.InfMDFe.Ide.Serie = 0;
             mdfe.InfMDFe.Ide.NMDF = ++config.ConfigWebService.Numeracao;
             mdfe.InfMDFe.Ide.CMDF = GetRandom();
             mdfe.InfMDFe.Ide.Modal = MDFeModal.Rodoviario;
@@ -570,27 +570,27 @@ namespace MDFe.AppTeste
             mdfe.InfMDFe.Ide.TpEmis = MDFeTipoEmissao.Normal;
             mdfe.InfMDFe.Ide.ProcEmi = MDFeIdentificacaoProcessoEmissao.EmissaoComAplicativoContribuinte;
             mdfe.InfMDFe.Ide.VerProc = "versao28383";
-            mdfe.InfMDFe.Ide.UFIni = Estado.GO;
-            mdfe.InfMDFe.Ide.UFFim = Estado.MT;
+            mdfe.InfMDFe.Ide.UFIni = Estado.PR;
+            mdfe.InfMDFe.Ide.UFFim = Estado.MS;
 
 
             mdfe.InfMDFe.Ide.InfMunCarrega.Add(new MDFeInfMunCarrega
             {
-                CMunCarrega = "5211701",
-                XMunCarrega = "JANDAIA"
+                CMunCarrega = "4124509",
+                XMunCarrega = "SANTO INACIO"
             });
 
-            mdfe.InfMDFe.Ide.InfMunCarrega.Add(new MDFeInfMunCarrega
-            {
-                CMunCarrega = "5209952",
-                XMunCarrega = "INDIARA"
-            });
+            //mdfe.InfMDFe.Ide.InfMunCarrega.Add(new MDFeInfMunCarrega
+            //{
+            //    CMunCarrega = "5209952",
+            //    XMunCarrega = "INDIARA"
+            //});
 
-            mdfe.InfMDFe.Ide.InfMunCarrega.Add(new MDFeInfMunCarrega
-            {
-                CMunCarrega = "5200134",
-                XMunCarrega = "ACREUNA"
-            });
+            //mdfe.InfMDFe.Ide.InfMunCarrega.Add(new MDFeInfMunCarrega
+            //{
+            //    CMunCarrega = "5200134",
+            //    XMunCarrega = "ACREUNA"
+            //});
 
             #endregion (ide)
 
@@ -710,13 +710,13 @@ namespace MDFe.AppTeste
             {
                 new MDFeInfMunDescarga
                 {
-                    XMunDescarga = "CUIABA",
-                    CMunDescarga = "5103403",
+                    XMunDescarga = "mundo novo",
+                    CMunDescarga = "5005681",
                     InfCTe = new List<MDFeInfCTe>
                     {
                         new MDFeInfCTe
                         {
-                            ChCTe = "52161021351378000100577500000000191194518006"
+                            ChCTe = "41241004198074000135570010000003621751233396"
                         }
                     }
                 }

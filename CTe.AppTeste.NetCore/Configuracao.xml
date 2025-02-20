@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuracao>
+  <Geral>
+    <Versao>4.00</Versao>
+    <Ambiente>2</Ambiente>
+    <!-- 1 = Produção, 2 = Homologação -->
+    <UF>SP</UF>
+    <!-- Ajuste para o estado correto -->
+    <DiretorioSchemas>C:\Schemas\CTe</DiretorioSchemas>
+  </Geral>
+
+  <CertificadoDigital>
+    <Tipo>Arquivo</Tipo>
+    <!-- Pode ser "Arquivo" ou "Repositorio" -->
+    <Arquivo>C:\Certificados\certificado.pfx</Arquivo>
+    <Senha>123456</Senha>
+  </CertificadoDigital>
+
+  <WebServices>
+    <TimeOut>60000</TimeOut>
+    <!-- Timeout das requisições -->
+    <SSLType>Tls12</SSLType>
+    <!-- TLS recomendado -->
+    <UF>SP</UF>
+    <Ambiente>2</Ambiente>
+    <!-- 1 = Produção, 2 = Homologação -->
+    <Proxy>
+      <Usar>false</Usar>
+      <Servidor></Servidor>
+      <Usuario></Usuario>
+      <Senha></Senha>
+    </Proxy>
+  </WebServices>
+
+  <Arquivos>
+    <Salvar>true</Salvar>
+    <PastaEnvio>C:\CTe\Envio</PastaEnvio>
+    <PastaRetorno>C:\CTe\Retorno</PastaRetorno>
+    <PastaLogs>C:\CTe\Logs</PastaLogs>
+  </Arquivos>
+
+  <DFe>
+    <TempoConsulta>3000</TempoConsulta>
+    <MaximoLote>50</MaximoLote>
+  </DFe>
+</Configuracao>
