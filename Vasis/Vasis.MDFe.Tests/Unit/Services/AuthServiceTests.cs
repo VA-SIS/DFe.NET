@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Xunit;
-using Vasis.MDFe.Application.Services.Auth;  // ✅ ADICIONADO
+using Vasis.MDFe.Application.Services.Auth;
 using Vasis.MDFe.Application.DTOs.Auth;
 
 namespace Vasis.MDFe.Tests.Unit.Services;
@@ -17,11 +17,16 @@ public class AuthServiceTests
             Password = "123456"
         };
 
-        var authService = new AuthService(); // Agora compila
+        var authService = new AuthService();
 
-        // Act & Assert - Esperamos que falhe (RED)
-        await Assert.ThrowsAsync<NotImplementedException>(() =>
-            authService.LoginAsync(loginRequest));
+        // Act
+        var result = await authService.LoginAsync(loginRequest);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Token.Should().NotBeNullOrEmpty();
+        result.ExpiresIn.Should().BeGreaterThan(0);
+        result.TokenType.Should().Be("Bearer");
     }
 
     [Fact]
@@ -34,10 +39,10 @@ public class AuthServiceTests
             Password = "wrong"
         };
 
-        var authService = new AuthService(); // Agora compila
+        var authService = new AuthService();
 
-        // Act & Assert - Esperamos que falhe (RED)
-        await Assert.ThrowsAsync<NotImplementedException>(() =>
+        // Act & Assert
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() =>
             authService.LoginAsync(loginRequest));
     }
 }
