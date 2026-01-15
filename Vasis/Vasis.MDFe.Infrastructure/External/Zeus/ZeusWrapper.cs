@@ -1,4 +1,6 @@
-﻿namespace Vasis.MDFe.Infrastructure.External.Zeus;
+﻿using Vasis.MDFe.Core.Interfaces.External;
+
+namespace Vasis.MDFe.Infrastructure.External.Zeus;
 
 public class ZeusWrapper : IZeusWrapper
 {
