@@ -1,0 +1,6 @@
+@Vasis.MDFe.WebAPI_HostAddress = http://localhost:5185
+
+GET {{Vasis.MDFe.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
