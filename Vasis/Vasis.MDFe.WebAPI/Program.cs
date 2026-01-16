@@ -1,4 +1,10 @@
+using Vasis.MDFe.Core.Interfaces.External;
+using Vasis.MDFe.Infrastructure.External;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// WebAPI/Program.cs - Adicionar ao container
+builder.Services.AddScoped<IZeusMDFeWrapper, ZeusMDFeWrapper>();
 
 // Add services to the container.
 builder.Services.AddControllers();

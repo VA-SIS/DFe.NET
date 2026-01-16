@@ -22,4 +22,14 @@
     <ProjectReference Include="..\Vasis.MDFe.Infrastructure\Vasis.MDFe.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Vasis.MDFe.Application\Vasis.MDFe.Application.csproj" />
+    <ProjectReference Include="..\Vasis.MDFe.Infrastructure\Vasis.MDFe.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+  
 </Project>

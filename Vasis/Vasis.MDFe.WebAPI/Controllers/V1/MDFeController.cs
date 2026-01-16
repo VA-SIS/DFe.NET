@@ -1,31 +1,73 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Vasis.MDFe.Application.DTOs.Document;
-using Vasis.MDFe.Application.DTOs.Validation;
+using Vasis.MDFe.Application.Services.Document;
 
-namespace Vasis.MDFe.WebAPI.Controllers.V1;
-
-[ApiController]
-[Route("api/v1/[controller]")]
-public class MDFeController : ControllerBase
+namespace Vasis.MDFe.WebAPI.Controllers.V1
 {
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateMDFeRequest request)
+    [ApiController]
+    [Route("api/v1/[controller]")]
+    [Authorize]
+    public class MDFeController : ControllerBase
     {
-        // RED - Implementação mínima para compilar
-        throw new NotImplementedException("MDFeController.Create não implementado - TDD RED");
-    }
+        private readonly MDFeDocumentService _mdfeService;
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(Guid id)
-    {
-        // RED - Implementação mínima para compilar
-        throw new NotImplementedException("MDFeController.GetById não implementado - TDD RED");
-    }
+        public MDFeController(MDFeDocumentService mdfeService)
+        {
+            _mdfeService = mdfeService;
+        }
 
-    [HttpPut("{id}/validate")]
-    public async Task<IActionResult> Validate(Guid id)
-    {
-        // RED - Implementação mínima para compilar
-        throw new NotImplementedException("MDFeController.Validate não implementado - TDD RED");
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateMDFe([FromBody] CreateMDFeRequest request)
+        {
+            if (request == null)
+                return BadRequest("Request inválido");
+
+            var result = await _mdfeService.CreateMDFeAsync(request);
+
+            if (result.Success)
+                return Ok(result);
+
+            return BadRequest(result);
+        }
+
+        [HttpPost("validate")]
+        public async Task<IActionResult> ValidateMDFe([FromBody] CreateMDFeRequest request)
+        {
+            if (request == null)
+                return BadRequest("Request inválido");
+
+            var result = await _mdfeService.ValidateMDFeAsync(request);
+            return Ok(result);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetMDFe(int id)
+        {
+            var result = await _mdfeService.GetMDFeAsync(id);
+
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllMDFe()
+        {
+            var result = await _mdfeService.GetAllMDFeAsync();
+            return Ok(result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteMDFe(int id)
+        {
+            var result = await _mdfeService.DeleteMDFeAsync(id);
+
+            if (result)
+                return NoContent();
+
+            return NotFound();
+        }
     }
 }
