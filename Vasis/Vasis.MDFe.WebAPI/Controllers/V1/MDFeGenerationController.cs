@@ -1,47 +1,40 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Vasis.MDFe.Application.DTOs.Transmission;
-using Vasis.MDFe.Application.Services.Transmission;
+using Vasis.MDFe.Application.DTOs.Generation;
+using Vasis.MDFe.Application.Services.Generation;
 
 namespace Vasis.MDFe.WebAPI.Controllers.V1
 {
     [ApiController]
-    [Route("api/v1/mdfe/transmission")]
+    [Route("api/v1/mdfe/generation")]
     [Authorize]
-    public class MDFeTransmissionController : ControllerBase
+    public class MDFeGenerationController : ControllerBase
     {
-        private readonly MDFeTransmissionService _transmissionService;
+        private readonly MDFeGenerationService _generationService;
 
-        public MDFeTransmissionController(MDFeTransmissionService transmissionService)
+        public MDFeGenerationController(MDFeGenerationService generationService)
         {
-            _transmissionService = transmissionService;
+            _generationService = generationService;
         }
 
-        [HttpPost("send")]
-        public async Task<IActionResult> SendMDFe([FromBody] SendMDFeRequest request)
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateMDFe([FromBody] CreateMDFeRequest request)
         {
             if (request == null)
                 return BadRequest("Request inválido");
 
-            var result = await _transmissionService.SendMDFeAsync(request);
+            var result = await _generationService.CreateMDFeAsync(request);
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-        [HttpPost("check-status")]
-        public async Task<IActionResult> CheckStatus([FromBody] CheckStatusRequest request)
+        [HttpPost("sign")]
+        public async Task<IActionResult> SignMDFe([FromBody] SignMDFeRequest request)
         {
             if (request == null)
                 return BadRequest("Request inválido");
 
-            var result = await _transmissionService.CheckStatusAsync(request);
-            return Ok(result);
-        }
-
-        [HttpGet("service-status")]
-        public async Task<IActionResult> GetServiceStatus()
-        {
-            var result = await _transmissionService.GetServiceStatusAsync();
-            return Ok(result);
+            var result = await _generationService.SignMDFeAsync(request);
+            return result.Success ? Ok(result) : BadRequest(result);
         }
     }
 }

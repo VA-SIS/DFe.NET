@@ -20,6 +20,9 @@ namespace Vasis.MDFe.WebAPI.Controllers.V1
         [HttpPost("validate-xml")]
         public async Task<IActionResult> ValidateXml([FromBody] ValidateXmlRequest request)
         {
+            if (request == null)
+                return BadRequest("Request inválido");
+
             var result = await _validationService.ValidateXmlAsync(request);
             return Ok(result);
         }
@@ -27,6 +30,9 @@ namespace Vasis.MDFe.WebAPI.Controllers.V1
         [HttpPost("validate-business-rules")]
         public async Task<IActionResult> ValidateBusinessRules([FromBody] ValidateBusinessRulesRequest request)
         {
+            if (request == null)
+                return BadRequest("Request inválido");
+
             var result = await _validationService.ValidateBusinessRulesAsync(request);
             return Ok(result);
         }

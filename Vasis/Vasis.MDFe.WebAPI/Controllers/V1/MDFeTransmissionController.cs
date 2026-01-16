@@ -20,6 +20,9 @@ namespace Vasis.MDFe.WebAPI.Controllers.V1
         [HttpPost("send")]
         public async Task<IActionResult> SendMDFe([FromBody] SendMDFeRequest request)
         {
+            if (request == null)
+                return BadRequest("Request inválido");
+
             var result = await _transmissionService.SendMDFeAsync(request);
             return result.Success ? Ok(result) : BadRequest(result);
         }
@@ -27,6 +30,9 @@ namespace Vasis.MDFe.WebAPI.Controllers.V1
         [HttpPost("check-status")]
         public async Task<IActionResult> CheckStatus([FromBody] CheckStatusRequest request)
         {
+            if (request == null)
+                return BadRequest("Request inválido");
+
             var result = await _transmissionService.CheckStatusAsync(request);
             return Ok(result);
         }
