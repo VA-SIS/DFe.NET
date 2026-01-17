@@ -1,7 +1,8 @@
-﻿namespace Vasis.MDFe.Core.Interfaces.Services;
-
-public interface IPasswordHasher
+﻿namespace Vasis.MDFe.Core.Interfaces.Services
 {
-    string HashPassword(string password);
-    bool VerifyPassword(string password, string hashedPassword);
+    public interface IPasswordHasher
+    {
+        string HashPassword(string password);
+        bool VerifyPassword(string password, string hash);
+    }
 }

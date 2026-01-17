@@ -3,123 +3,135 @@ using Microsoft.Extensions.Logging;
 using Vasis.MDFe.Application.DTOs.Document;
 using Vasis.MDFe.Application.DTOs.Validation;
 using Vasis.MDFe.Core.Entities.Document;
-using Vasis.MDFe.Core.Enums;
 using Vasis.MDFe.Core.Interfaces.External;
 using Vasis.MDFe.Core.Interfaces.Repositories;
 
-namespace Vasis.MDFe.Application.Services.Document;
-
-public class MDFeDocumentService : IMDFeDocumentService
+namespace Vasis.MDFe.Application.Services.Document
 {
-    private readonly IMDFeRepository _repository;
-    private readonly IZeusWrapper _zeusWrapper;
-    private readonly IMapper _mapper;
-    private readonly ILogger<MDFeDocumentService> _logger;
-
-    public MDFeDocumentService(
-        IMDFeRepository repository,
-        IZeusWrapper zeusWrapper,
-        IMapper mapper,
-        ILogger<MDFeDocumentService> logger)
+    public class MDFeDocumentService
     {
-        _repository = repository;
-        _zeusWrapper = zeusWrapper;
-        _mapper = mapper;
-        _logger = logger;
-    }
+        private readonly IMDFeRepository _repository;
+        private readonly IZeusWrapper _zeusWrapper;
+        private readonly IMapper _mapper;
+        private readonly ILogger<MDFeDocumentService> _logger;
 
-    public async Task<MDFeResponse> CreateAsync(CreateMDFeRequest request)
-    {
-        try
+        public MDFeDocumentService(
+            IMDFeRepository repository,
+            IZeusWrapper zeusWrapper,
+            IMapper mapper,
+            ILogger<MDFeDocumentService> logger)
         {
-            _logger.LogInformation("Criando MDFe para emitente: {CNPJ}", request.EmitenteCNPJ);
+            _repository = repository;
+            _zeusWrapper = zeusWrapper;
+            _mapper = mapper;
+            _logger = logger;
+        }
 
-            // Mapear DTO para entidade
+        public async Task<MDFeResponse> CreateMDFeAsync(CreateMDFeRequest request)
+        {
+            try
+            {
+                var zeusResult = await _zeusWrapper.CreateMDFeAsync(request);
+
+                if (zeusResult.Success)
+                {
+                    return await ProcessSuccessfulCreation(request, zeusResult);
+                }
+
+                return CreateFailureResponse(zeusResult.ErrorMessage);
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex, "Erro ao criar MDFe");
+            }
+        }
+
+        public async Task<ValidationResponse> ValidateMDFeAsync(CreateMDFeRequest request)
+        {
+            try
+            {
+                var result = await _zeusWrapper.ValidateMDFeAsync(request);
+
+                return new ValidationResponse
+                {
+                    IsValid = result.IsValid,
+                    Errors = result.Errors,
+                    Message = result.IsValid ? "MDFe válido" : "MDFe inválido"
+                };
+            }
+            catch (Exception ex)
+            {
+                return CreateValidationErrorResponse(ex);
+            }
+        }
+
+        public async Task<MDFeResponse> GetMDFeAsync(int id)
+        {
+            var document = await _repository.GetByIdAsync(id);
+            return _mapper.Map<MDFeResponse>(document);
+        }
+
+        public async Task<IEnumerable<MDFeResponse>> GetAllMDFeAsync()
+        {
+            var documents = await _repository.GetAllAsync();
+            return _mapper.Map<IEnumerable<MDFeResponse>>(documents);
+        }
+
+        public async Task<bool> DeleteMDFeAsync(int id)
+        {
+            var document = await _repository.GetByIdAsync(id);
+            if (document == null)
+                return false;
+
+            await _repository.DeleteAsync(document);
+            return true;
+        }
+
+        private async Task<MDFeResponse> ProcessSuccessfulCreation(CreateMDFeRequest request, ZeusCreateResult zeusResult)
+        {
             var document = _mapper.Map<MDFeDocument>(request);
-            document.Status = DocumentStatus.Draft;
+            document.ChaveAcesso = zeusResult.ChaveAcesso;
+            document.XmlContent = zeusResult.XmlGerado;
 
-            // Salvar no repositório
-            var savedDocument = await _repository.CreateAsync(document);
+            await _repository.AddAsync(document);
 
-            // Mapear entidade para response
-            var response = _mapper.Map<MDFeResponse>(savedDocument);
-
-            _logger.LogInformation("MDFe criado com sucesso. ID: {Id}", response.Id);
-
-            return response;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Erro ao criar MDFe para emitente: {CNPJ}", request.EmitenteCNPJ);
-            throw;
-        }
-    }
-
-    public async Task<MDFeResponse> GetByIdAsync(Guid id)
-    {
-        try
-        {
-            _logger.LogInformation("Buscando MDFe por ID: {Id}", id);
-
-            var document = await _repository.GetByIdAsync(id);
-
-            if (document == null || document.IsDeleted)
+            return new MDFeResponse
             {
-                throw new KeyNotFoundException($"MDFe com ID {id} não encontrado");
-            }
-
-            var response = _mapper.Map<MDFeResponse>(document);
-
-            _logger.LogInformation("MDFe encontrado: {Id}", id);
-
-            return response;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Erro ao buscar MDFe por ID: {Id}", id);
-            throw;
-        }
-    }
-
-    public async Task<ValidationResponse> ValidateAsync(Guid id)
-    {
-        try
-        {
-            _logger.LogInformation("Validando MDFe: {Id}", id);
-
-            var document = await _repository.GetByIdAsync(id);
-
-            if (document == null || document.IsDeleted)
-            {
-                throw new KeyNotFoundException($"MDFe com ID {id} não encontrado para validação");
-            }
-
-            // Integrar com Zeus para validação
-            var zeusResult = await _zeusWrapper.ValidateMDFeAsync(document.XmlContent ?? "");
-
-            var validationResponse = new ValidationResponse
-            {
-                IsValid = zeusResult.IsValid,
-                Errors = zeusResult.Errors,
-                Warnings = new List<string>()
+                Success = true,
+                ChaveAcesso = zeusResult.ChaveAcesso,
+                XmlContent = zeusResult.XmlGerado,
+                Message = "MDFe criado com sucesso"
             };
-
-            // Atualizar status do documento
-            if (zeusResult.IsValid)
-            {
-                document.Status = DocumentStatus.Validated;
-                await _repository.UpdateAsync(document);
-            }
-
-            _logger.LogInformation("Validação concluída para MDFe: {Id}. Válido: {IsValid}",
-                id, zeusResult.IsValid);
-
-            return validationResponse;
         }
-        catch (Exception ex)
+
+        private MDFeResponse CreateFailureResponse(string errorMessage)
         {
-            _logger.LogError(ex, "Erro ao validar MDFe: {Id}", id);
-            throw;
+            return new MDFeResponse
+            {
+                Success = false,
+                Message = errorMessage
+            };
+        }
+
+        private MDFeResponse HandleException(Exception ex, string context)
+        {
+            _logger.LogError(ex, context);
+            return new MDFeResponse
+            {
+                Success = false,
+                Message = ex.Message
+            };
+        }
+
+        private ValidationResponse CreateValidationErrorResponse(Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao validar MDFe");
+            return new ValidationResponse
+            {
+                IsValid = false,
+                Errors = new List<string> { ex.Message },
+                Message = "Erro na validação"
+            };
         }
     }
 }

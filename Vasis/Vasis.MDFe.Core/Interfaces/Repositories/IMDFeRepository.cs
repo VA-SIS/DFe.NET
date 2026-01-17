@@ -1,12 +1,14 @@
 ﻿using Vasis.MDFe.Core.Entities.Document;
 
-namespace Vasis.MDFe.Core.Interfaces.Repositories;
-
-public interface IMDFeRepository
+namespace Vasis.MDFe.Core.Interfaces.Repositories
 {
-    Task<MDFeDocument> CreateAsync(MDFeDocument document);
-    Task<MDFeDocument?> GetByIdAsync(Guid id);
-    Task<MDFeDocument> UpdateAsync(MDFeDocument document);
-    Task<bool> DeleteAsync(Guid id);
-    Task<IEnumerable<MDFeDocument>> GetByEmitenteCNPJAsync(string cnpj);
+    public interface IMDFeRepository
+    {
+        Task<MDFeDocument> GetByIdAsync(int id);
+        Task<MDFeDocument> GetByChaveAcessoAsync(string chaveAcesso);
+        Task<IEnumerable<MDFeDocument>> GetAllAsync();
+        Task AddAsync(MDFeDocument document);
+        Task UpdateAsync(MDFeDocument document);
+        Task DeleteAsync(MDFeDocument document);
+    }
 }
